@@ -12,4 +12,4 @@ Front end React, Node js,
 
 Tools: 
 React,Express.js,Material UI, Mysql , VS code and Mysql workbench
-I also used hosting by AWS free tier, which will expire in Nove, 2023
+I also used hosting by AWS free tier, which will expire in November, 2023
