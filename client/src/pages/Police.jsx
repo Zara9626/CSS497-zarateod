@@ -1,9 +1,15 @@
 import React from "react";
 
+
+
+
+
 function Police() {
+ 
+
   return (
-    <div className="Police">
-      <h1>Police Reports </h1>
+    <div className="Contractors">
+      <h1>Police report</h1>
     </div>
   );
 }
