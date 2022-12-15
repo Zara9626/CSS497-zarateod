@@ -1,132 +1,95 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
+import { useParams } from "react-router";
+import Button from "@mui/material/Button";
 
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 
-const Update = () => {
-    
-    const [apartmentNum,setnum] = useState('')
-    const [address,setAdr] = useState('')
-    const [bedrooms,setBed] = useState('')
-    const [sqFeet,setSquare ] = useState('')
-    const [rent,setRent] = useState('')
-    const [leaseStart,setStart] = useState('')
-    const [leaseEnd,setEnd] = useState('')
-    const [damage, setDamage] = useState('')
+const UpdateResident = () => {
+  const [phone, setPhone] = useState("");
+  const [employerContact, setEmp] = useState("");
+  const [emergencyContact, setEmer] = useState("");
+  const [income, setIncome] = useState("");
+  const { residentId } = useParams();
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        setnum(localStorage.getItem('Apartment number'));
-        setAdr(localStorage.getItem('Adress'));
-        setBed(localStorage.getItem('Bedrooms'));
-        setSquare(localStorage.getItem('Sq.Feet'));
-        setRent(localStorage.getItem('Rent'));
-        setStart(localStorage.getItem('Lease start'));
-        setEnd(localStorage.getItem('Lease end'));
-        setDamage(localStorage.getItem('Damage description'));
-       
-        
-    }, []);
-
-    const updateData = (id) => {
-        axios.put(`http://localhost:8080/property/get/${id}`,{
-            apartmentNum,
-            address,
-            bedrooms,
-            sqFeet,
-            rent,
-            leaseStart,leaseEnd,
-            damage
-        }).then(() => {
-            navigate.push('/Property')
-        })
+  useEffect(() => {
+    getResidentById();
+  }, []);
+  const updateResident = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.patch(`http://localhost:8080/property/put/${residentId}`, {
+        phone,
+        employerContact,
+        emergencyContact,
+        income,
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
     }
-    
-    return (
-        <Box
-        component="form"
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
+  };
+  const getResidentById = async (residentId) => {
+    const response = await axios.get(
+      `http://localhost:8080/resident/put/${residentId}`
+    );
+    setPhone(response.data.phone);
+    setEmp(response.data.employerContact);
+    setEmer(response.data.emergencyContact);
+    setIncome(response.data.setIncome);
+  };
+
+  return (
+    <Box
+      component="form"
+      sx={{
+        "& .MuiTextField-root": { m: 1, width: "25ch" },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div>
         <TextField
-          id="outlined-required"
-          label="Apartment number"
-          onChange={(e) =>{
-              setnum(e.target.value);
+          label="Phone number"
+          onChange={(e) => {
+            setPhone(e.target.value);
           }}
         />
         <TextField
-          id="outlined-required"
-          label="Address"
-          onChange={(e) =>{
-              setAdr(e.target.value);
+          label="Employer"
+          onChange={(e) => {
+            setEmp(e.target.value);
           }}
         />
-        </div>
-        <div>
+      </div>
+      <div>
         <TextField
-          id="outlined-required"
-          label="Bedrooms"
-          onChange={(e) =>{
-              setBed(e.target.value);
+          label="Emergency contact"
+          onChange={(e) => {
+            setEmer(e.target.value);
           }}
         />
         <TextField
-          id="outlined-required"
-          label="Sq.feet"
-          onChange={(e) =>{
-              setSquare(e.target.value);
+          label="Income"
+          onChange={(e) => {
+            setIncome(e.target.value);
           }}
-          />
-        </div>
-        <div>
-        <TextField
-          id="outlined-required"
-          label="Rent"
-          onChange={(e) =>{
-              setRent(e.target.value);
-          }}
-          
         />
-        <TextField
-          id="outlined-required"
-          label="Lease start"
-          onChange={(e) =>{
-              setStart(e.target.value);
-          }}
-          
-        />
-        </div>
-        <div>
-        <TextField
-          id="outlined-required"
-          label="Lease end"
-          onChange={(e) =>{
-              setEnd(e.target.value);
-          }}
-          
-        />
-        <TextField
-          id="outlined-required"
-          label="Damage description"
-          onChange={(e) =>{
-              setDamage(e.target.value);
-          }}
-          
-        />
-                
-        <button onClick={updateData}>Update</button>
-            
-        </div>
-        </Box>
-    )
+
+        <Button
+          onClick={() => updateResident()}
+          size="large"
+          variant="contained"
+        >
+          Update
+        </Button>
+      </div>
+    </Box>
+  );
 };
- 
-export default Update
+
+export default UpdateResident;

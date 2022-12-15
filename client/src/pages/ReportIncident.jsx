@@ -8,26 +8,32 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
-import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import Button from "@mui/material/Button";
-import CachedIcon from "@mui/icons-material/Cached";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
+import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
+import { useParams } from "react-router";
 
-function Incident() {
-  const [incidentList, setIncidentList] = useState([]);
+const ReportIncident = () => {
+  const [reportList, setReport] = useState([]);
+  const { propertyId } = useParams();
+
   useEffect(() => {
-    axios.get(`http://localhost:8080/incident`).then((response) => {
-      console.log(response.data);
-      setIncidentList(response.data);
-    });
+    getIncidentById();
   }, []);
+  const getIncidentById = async (propertyId) => {
+    const response = await axios.get(
+      'http://localhost:8080/incident/get/${propertyId}'
+    );
+    setReport(response.data);
+  };
 
   return (
     <div>
       <h1> Incidents</h1>
       <TableContainer component={Paper}>
-        <Table style={{ width: 1400 }} aria-label="a dense table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="left">Incident date</TableCell>
@@ -40,7 +46,7 @@ function Incident() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {incidentList.map((data, id) => (
+            {reportList.map((data, id) => (
               <TableRow key={id}>
                 <TableCell>{data.eventDate}</TableCell>
                 <TableCell>{data.desc}</TableCell>
@@ -60,17 +66,6 @@ function Incident() {
                     </Link>
                   </Button>
                 </TableCell>
-                <TableCell size="string">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<CachedIcon />}
-                  >
-                    <Link href="/ReportMain" color="inherit">
-                      Update
-                    </Link>
-                  </Button>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -82,6 +77,11 @@ function Incident() {
         direction="row"
         justifyContent="center"
       >
+        <Button variant="contained" size="medium" startIcon={<AddCircleIcon />}>
+          <Link href="/AddProp" color="inherit">
+            Add new incident to this property
+          </Link>
+        </Button>
         <Button variant="contained" size="medium" startIcon={<HomeIcon />}>
           <Link href="/Property" color="inherit">
             Go to Properties
@@ -90,5 +90,5 @@ function Incident() {
       </Stack>
     </div>
   );
-}
-export default Incident;
+};
+export default ReportIncident;
