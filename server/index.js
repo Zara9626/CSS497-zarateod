@@ -21,7 +21,7 @@ module.exports = connection;
 
 connection.connect(function (err) {
   if (err) {
-    console.error('database connection failed' + err.stack);
+    console.error('database connection failed: ' + err.stack);
     return;
   }
   console.log('Connected to database.');
@@ -335,5 +335,5 @@ app.post("/payment/insert", (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log('running on port , ${PORT}');
+  console.log('running on port:' , PORT);
 });
