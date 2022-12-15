@@ -1,39 +1,16 @@
-import React from "react";
-import { BrowserRouter,Routes,Route} from "react-router-dom";
-import ReactDOM from "react-dom";
-import Layout from  "./Layout";
-import Dashboard from "./pages/Dashboard";
-import AddNew from "./pages/AddNew";
-import Contractors from "./pages/Contractors";
-import Residents from "./pages/Residents";
-import Incidents from "./pages/Incidents";
-import Police from "./pages/Police";
-import SignIn from "./pages/SignIn";
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout/>}>
-          <Route index element={<Dashboard/>} />
+import App from './App';
 
-          <Route path= "Residents" element={<Residents />}/>
-          <Route path= "AddNew" element={<AddNew />}/>
-          <Route path= "Contractors" element={<Contractors/>}/>
-          <Route path= "Incidents" element={<Incidents />}/>
-          <Route path= "Police" element={<Police/>}/>
-          <Route path= "SignIn" element={<SignIn />}/>
+import 'bootstrap/dist/css/bootstrap.min.css';
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <Router>
+    <App />
+    </Router>
 
-          </Route>
-      </Routes>
-    </BrowserRouter>
-
-  );
-}
-
-ReactDOM.render(<App />, document.getElementById("root"));
-
-
-
-
+);
