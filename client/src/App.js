@@ -32,7 +32,7 @@ function App() {
           <Route path="Incident" element={<Incident />} />
           <Route path="SignIn" element={<SignIn />} />
           <Route path="/UpdateProp" element={<UpdateProp />} />
-          <Route path="/AddResident" element={<AddResident />} />
+          <Route path="/AddResident/:id" element={<AddResident />} />
           <Route path="/UpdateResident" element={<UpdateResident />} />
           <Route path="/Maintenance" element={<Maintenance />} />
           <Route path="/AddIncident" element={<AddIncident />} />

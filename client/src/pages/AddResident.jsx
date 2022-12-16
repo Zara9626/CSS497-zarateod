@@ -19,14 +19,16 @@ function AddResident() {
   const [emer, setEmer] = useState("");
   const [income, setIncome] = useState("");
 
-  const {propertyId} =useParams();
+  // const {propertyId} = useParams();
+  let { id } = useParams();
 
   const navigate = useNavigate();
+
+  console.log("AddResident - propertyId:", id);
 
   const postResident = async (e) => {
     e.preventDefault();
     try {
-      console.log("postResident", propertyId);
       await axios.post('http://localhost:8080/resident/post/${propertyId}', {
         first,
         last,

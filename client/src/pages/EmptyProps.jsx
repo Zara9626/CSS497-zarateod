@@ -14,9 +14,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
 
 const EmptyProps = () => {
   const [emptyList, setEmpty] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProperty();
@@ -38,6 +40,14 @@ const EmptyProps = () => {
       console.log(error);
     }
   };
+
+  const handleClick = (propId) => {
+    console.log("handleClick: ", propId);
+    const url = "/AddResident/" + propId;
+    console.log("url: ", url);
+    navigate(url);
+  };
+
 
   return (
     <div>
@@ -68,7 +78,17 @@ const EmptyProps = () => {
                     size="small"
                     startIcon={<PersonAddAlt1Icon />}
                   >
-                    <Link href="/AddResident" color="inherit">
+                    <Link
+                      // href="AddResident"
+                      color="inherit"
+                      state = {{ propId: data.propertyId }}
+                      onClick = {(e) => {
+                        e.preventDefault();
+                        console.info("propertyId", data.propertyId);
+                        // Now we have the property ID we can call AddResident with that ID
+                        handleClick(data.propertyId);
+                      }}
+                      >
                       Add new Resident
                     </Link>
                   </Button>
