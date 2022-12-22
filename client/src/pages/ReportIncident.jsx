@@ -9,36 +9,44 @@ import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const ReportIncident = () => {
-  const [reportList, setReport] = useState([]);
+  const [reportList, setReportList] = useState([]);
+
+  const navigate = useNavigate();
+
   const { propertyId } = useParams();
+  let { incidentId } = useParams();
 
   useEffect(() => {
     getIncidentById();
   }, []);
-  const getIncidentById = async (propertyId) => {
-    const response = await axios.get('http://localhost:8080/incident/get/${propertyId}'
+
+  const getIncidentById = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/incident/get/${propertyId}/${incidentId}`
     );
-    setReport(response.data);
+    setReportList(response.data);
+  };
+  const handleMain = (incId) => {
+    const url = "/AddMaintenance/" + incId;
+    navigate(url);
   };
 
   return (
     <div>
-      <h1> Incidents</h1>
+      <h1> Incidents </h1>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table style={{ width: 1300 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell align="left">Incident date</TableCell>
               <TableCell align="left">Description</TableCell>
-              <TableCell align="left">Property address</TableCell>
-              <TableCell align="left">Apartment #</TableCell>
               <TableCell align="left">Police report date</TableCell>
               <TableCell align="left">Officer name </TableCell>
               <TableCell align="left">Police report #</TableCell>
@@ -48,9 +56,7 @@ const ReportIncident = () => {
             {reportList.map((data, id) => (
               <TableRow key={id}>
                 <TableCell>{data.eventDate}</TableCell>
-                <TableCell>{data.desc}</TableCell>
-                <TableCell>{data.address}</TableCell>
-                <TableCell>{data.apartmentNum}</TableCell>
+                <TableCell>{data.happened}</TableCell>
                 <TableCell>{data.policeReportDate}</TableCell>
                 <TableCell>{data.officerName}</TableCell>
                 <TableCell>{data.policeReportId}</TableCell>
@@ -60,8 +66,15 @@ const ReportIncident = () => {
                     size="small"
                     startIcon={<HomeRepairServiceIcon />}
                   >
-                    <Link href="/ReportMain" color="inherit">
-                      Add maintenance
+                    <Link
+                      color="inherit"
+                      state={{ propId: data.incidentId }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleMain(data.incidentId);
+                      }}
+                    >
+                      Add maintenance to this incident
                     </Link>
                   </Button>
                 </TableCell>
@@ -76,11 +89,6 @@ const ReportIncident = () => {
         direction="row"
         justifyContent="center"
       >
-        <Button variant="contained" size="medium" startIcon={<AddCircleIcon />}>
-          <Link href="/AddProp" color="inherit">
-            Add new incident to this property
-          </Link>
-        </Button>
         <Button variant="contained" size="medium" startIcon={<HomeIcon />}>
           <Link href="/Property" color="inherit">
             Go to Properties

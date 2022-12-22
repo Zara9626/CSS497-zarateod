@@ -7,41 +7,41 @@ import Button from "@mui/material/Button";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link, useNavigate } from "react-router-dom";
 
-const UpdateProp = () => {
-  const [rent, setRent] = useState("");
-  const [leaseStart, setStart] = useState("");
-  const [leaseEnd, setEnd] = useState("");
-  const [damage, setDamage] = useState("");
+const UpdateIncident = () => {
+  const [happened, setHap] = useState("");
+  const [officerName, setOfficer] = useState("");
+  const [policeReportDate, setPoliceDate] = useState("");
+  const [policeReportId, setPoliceId] = useState("");
 
   let { propertyId } = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPropById();
+    getInc();
   }, []);
-
-  const updateData = async (e) => {
+  const updInc = async (e) => {
     try {
-      await axios.put(`http://localhost:8080/property/put/${propertyId}`, {
-        rent,
-        leaseStart,
-        leaseEnd,
-        damage,
+      console.log("updateData", propertyId);
+      await axios.put(`http://localhost:8080/incident/put/${propertyId}`, {
+        happened,
+        officerName,
+        policeReportDate,
+        policeReportId,
       });
     } catch (error) {
       console.log(error);
     }
   };
-  const getPropById = async (propertyId) => {
-  const response = await axios.get(
-      `http://localhost:8080/property/put/${propertyId}`
+  const getInc = async (propertyId) => {
+    const response = await axios.get(
+      `http://localhost:8080/incident/put/${propertyId}`
     );
-    setRent(response.data.rent);
-    setEnd(response.data.leaseEnd);
-    setDamage(response.data.damage);
+    setHap(response.data.happened);
+    setOfficer(response.data.officerName);
+    setPoliceDate(response.data.policeReportDate);
+    setPoliceId(response.data.policeReportId);
   };
-
   function refresh(){
     window.location.reload(true);
 
@@ -56,39 +56,36 @@ const UpdateProp = () => {
       autoComplete="off"
     >
       <div>
-        <h1> Update property details</h1>
         <TextField
-          label="Rent"
+          label="Description"
           onChange={(e) => {
-            setRent(e.target.value);
+            setHap(e.target.value);
           }}
         />
         <TextField
-          label="Lease start in YYYY-MM-DD"
+          label="Officer name"
           onChange={(e) => {
-            setStart(e.target.value);
+            setOfficer(e.target.value);
           }}
         />
       </div>
       <div>
         <TextField
-          label="Lease end in YYYY-MM-DD"
+          label="Police report Date in YYYY-MM-DD"
           onChange={(e) => {
-            setEnd(e.target.value);
+            setPoliceDate(e.target.value);
           }}
         />
         <TextField
-          label="Damage description"
+          label="Police report #"
           onChange={(e) => {
-            setDamage(e.target.value);
+            setPoliceId(e.target.value);
           }}
         />
-
-        <Button onClick={() => {updateData();
-        navigate('/Property');refresh()
+        <Button onClick={() => {updInc();
+        navigate('/Incident');refresh()
         }}
-        
-       size="large" variant="contained">
+        size="large" variant="contained">
           Update
         </Button>
         <Box textAlign="center">
@@ -103,4 +100,4 @@ const UpdateProp = () => {
   );
 };
 
-export default UpdateProp;
+export default UpdateIncident;

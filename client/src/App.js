@@ -1,12 +1,11 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {Route, Routes } from 'react-router-dom';
 import Property from "./pages/Property";
 import AddProp from "./pages/AddProp";
 import AddMaintenance from "./pages/AddMaintenance";
 import Residents from "./pages/Residents";
 import Incident from "./pages/Incident";
 import Maintenance from "./pages/Maintenance";
-import SignIn from "./pages/SignIn";
 import UpdateProp from "./pages/UpdateProp";
 import Navigation from './Navigation';
 import UpdateResident from './pages/UpdateResident';
@@ -18,34 +17,38 @@ import EmptyProps from './pages/EmptyProps';
 import ReportIncident from './pages/ReportIncident';
 import ReportMain from './pages/ReportMain';
 import ReportPay from './pages/ReportPay';
+import UpdateMain from './pages/UpdateMain';
+import UpdateIncident from './pages/UpdateIncident';
 
 
 function App() {
   return (
     <div className="App">
-     
-        <Navigation />
-        <Routes>
-          <Route path="Residents" element={<Residents />} />
-          <Route path="AddProp" element={<AddProp />} />
-          <Route path="AddMaintenance" element={<AddMaintenance />} />
-          <Route path="Incident" element={<Incident />} />
-          <Route path="SignIn" element={<SignIn />} />
-          <Route path="/UpdateProp" element={<UpdateProp />} />
-          <Route path="/AddResident" element={<AddResident />} />
-          <Route path="/UpdateResident" element={<UpdateResident />} />
-          <Route path="/Maintenance" element={<Maintenance />} />
-          <Route path="/AddIncident" element={<AddIncident />} />
-          <Route path="/Payment" element={<Payment />} />
-          <Route path="/Addpayment" element={<AddPayment />} />
-          <Route path="/Property" element={<Property />} />
-          <Route path="/EmptyProps" element={<EmptyProps />} />
-          <Route path="/ReportIncident" element={<ReportIncident/>}/>
-          <Route path="/ReportMain" element={<ReportMain/>}/>
-          <Route path="/ReportPay" element={<ReportPay/>}/>
-          <Route path="/" element={<Property />} />
 
-        </Routes>
+      <Navigation />
+      <Routes>
+        <Route path="Residents" element={<Residents />} />
+        <Route path="AddProp" element={<AddProp />} />
+        <Route path="/AddMaintenance/:incidentId" element={<AddMaintenance />} />
+        <Route path="Incident" element={<Incident />} />
+        
+        <Route path="/UpdateProp/:propertyId" element={<UpdateProp />} />
+        <Route path="/AddResident/:propertyId" element={<AddResident />} />
+        <Route path="/UpdateResident/:residentId" element={<UpdateResident />} />
+        <Route path="/Maintenance" element={<Maintenance />} />
+        <Route path="/AddIncident/:propertyId" element={<AddIncident />} />
+        <Route path="/Payment" element={<Payment />} />
+        <Route path="/AddPayment/:propertyId" element={<AddPayment />} />
+        <Route path="/Property" element={<Property />} />
+        <Route path="/EmptyProps" element={<EmptyProps />} />
+        <Route path="/ReportIncident/:propertyId/:incidentId" element={<ReportIncident />} />
+        <Route path="/ReportMain/:propertyId" element={<ReportMain />} />
+        <Route path="/ReportPay/:propertyId" element={<ReportPay />} />
+        <Route path="/UpdateMain/:eventId" element={<UpdateMain />} />
+        <Route path="/UpdateIncident/:propertyId" element={<UpdateIncident />} />
+        <Route path="/" element={<Property />} />
+
+      </Routes>
 
     </div>
   );

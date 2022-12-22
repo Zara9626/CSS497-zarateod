@@ -24,7 +24,7 @@ function Maintenance() {
 
   return (
     <div>
-      <h1>Maintenance</h1>
+      <h1>Maintenance records</h1>
       <TableContainer component={Paper}>
         <Table style={{ width: 1200 }} aria-label="simple table">
           <TableHead>
@@ -43,16 +43,16 @@ function Maintenance() {
                 <TableCell align="left">{data.mainDate}</TableCell>
                 <TableCell align="left">{data.description}</TableCell>
                 <TableCell align="left">{data.eventDate}</TableCell>
-                <TableCell align="left">{data.desc}</TableCell>
+                <TableCell align="left">{data.happened}</TableCell>
                 <TableCell align="left">{data.charge}</TableCell>
                 <TableCell align="left">{data.contractorName}</TableCell>
-                <TableCell size="string" size="small" align="left">
+                <TableCell size="string" size="small" align="center">
                   <Button
                     variant="contained"
                     size="small"
                     startIcon={<CachedIcon />}
                   >
-                    <Link href="/Update" color="inherit">
+                    <Link href={`/UpdateMain/${data.eventId}`} color="inherit">
                       Update
                     </Link>
                   </Button>

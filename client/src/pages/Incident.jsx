@@ -8,20 +8,34 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
-import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import Button from "@mui/material/Button";
 import CachedIcon from "@mui/icons-material/Cached";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
+import {useNavigate } from "react-router-dom";
+import { useParams } from "react-router";
 
 function Incident() {
   const [incidentList, setIncidentList] = useState([]);
+
   useEffect(() => {
-    axios.get(`http://localhost:8080/incident`).then((response) => {
-      console.log(response.data);
-      setIncidentList(response.data);
-    });
-  }, []);
+    getInc();
+  },[]);
+
+  const getInc = async() => {
+    const response = await axios.get("http://localhost:8080/incident");
+    setIncidentList(response.data);
+  };
+
+  const navigate = useNavigate();
+  let { incidentId } = useParams();
+
+
+  const handleMain = (incId) => {
+    const url = "/AddMaintenance/" + incId;
+    navigate(url);
+  }
+
 
   return (
     <div>
@@ -43,7 +57,7 @@ function Incident() {
             {incidentList.map((data, id) => (
               <TableRow key={id}>
                 <TableCell>{data.eventDate}</TableCell>
-                <TableCell>{data.desc}</TableCell>
+                <TableCell>{data.happened}</TableCell>
                 <TableCell>{data.address}</TableCell>
                 <TableCell>{data.apartmentNum}</TableCell>
                 <TableCell>{data.policeReportDate}</TableCell>
@@ -53,10 +67,12 @@ function Incident() {
                   <Button
                     variant="contained"
                     size="small"
-                    startIcon={<HomeRepairServiceIcon />}
+                    startIcon={<CachedIcon />}
                   >
-                    <Link href="/ReportMain" color="inherit">
-                      Add maintenance
+                    <Link href={`/UpdateIncident/${data.propertyId}`}
+                      color="inherit"
+                      >
+                      Update
                     </Link>
                   </Button>
                 </TableCell>
@@ -64,10 +80,16 @@ function Incident() {
                   <Button
                     variant="contained"
                     size="small"
-                    startIcon={<CachedIcon />}
+                  
                   >
-                    <Link href="/ReportMain" color="inherit">
-                      Update
+                    <Link color="inherit"
+                      state={{ propId: data.incidentId }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleMain(data.incidentId);
+                      }}
+                      >
+                      Add maintenance to this incident
                     </Link>
                   </Button>
                 </TableCell>

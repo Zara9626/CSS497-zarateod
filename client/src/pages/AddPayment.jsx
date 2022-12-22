@@ -1,68 +1,82 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Axios from 'axios';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router";
+import Button from "@mui/material/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import HomeIcon from "@mui/icons-material/Home";
 
 function AddPayment() {
-    const [amount,setAmount] = useState('')
-    const [receiptNum,setReceipt] = useState('')
-    const [paymentDate,setPayment] = useState('')
+  const [amount, setAmount] = useState("");
+  const [receiptNum, setReceipt] = useState("");
+  const [paymentDate, setPayment] = useState("");
 
-
-  const navigate = useNavigate();
+  let { propertyId } = useParams();
 
   const postPayment = async (e) => {
     e.preventDefault();
     try {
-      await Axios.post("http://localhost:8080/payment/insert", {
+      await Axios.post(`http://localhost:8080/payment/post/${propertyId}`, {
         amount,
         receiptNum,
-        paymentDate
+        paymentDate,
       });
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
 
-  
-
-return (
-      <Box
+  return (
+    <Box
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '50ch' },
+        "& .MuiTextField-root": { m: 1, width: "50ch" },
       }}
       noValidate
       autoComplete="off"
     >
       <div>
+        <h1>Add new payment</h1>
         <TextField
-        label="Amount paid "
-        type="text"
-        onChange={(e) => {
-              setAmount(e.target.value);
+          label="Amount paid "
+          type="text"
+          onChange={(e) => {
+            setAmount(e.target.value);
           }}
         />
         <TextField
-        label="Receipt date "
-        type="text"
-        onChange={(e) => {
+          label="Receipt number "
+          type="text"
+          onChange={(e) => {
             setReceipt(e.target.value);
-        }}
+          }}
         />
         <TextField
-           label="Payment date"
-           type="text"
-           onChange={(e) => {
-               setPayment(e.target.value);
-           }}
+          label="Payment date in YYYY-MM-DD"
+          type="text"
+          onChange={(e) => {
+            setPayment(e.target.value);
+          }}
         />
-       
       </div>
-        <button onClick={postPayment}>Submit</button>
+      <Button
+        onClick={postPayment}
+        size="large"
+        variant="contained"
+       
+      >
+        Submit
+      </Button>
+      <Box textAlign="center">
+        <Button variant="outlined" size="large" startIcon={<HomeIcon />}>
+          <Link to="/" color="inherit">
+            Go back
+          </Link>
+        </Button>
+      </Box>
     </Box>
   );
 }
-export default AddPayment
+export default AddPayment;

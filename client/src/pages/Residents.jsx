@@ -9,21 +9,20 @@ import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import EditIcon from "@mui/icons-material/Edit";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Residents() {
   const [residentList, setresidentList] = useState([]);
   useEffect(() => {
     getResident();
-    
   }, []);
 
   const getResident = async () => {
-    const response = await axios.get(
-      "http://localhost:8080/resident"
-    );
+    const response = await axios.get("http://localhost:8080/resident");
+    console.log(response.data)
     setresidentList(response.data);
   };
 
@@ -35,13 +34,17 @@ export default function Residents() {
       console.log(error);
     }
   };
-;
+
+  function refresh(){
+    window.location.reload(true);
+
+  };
 
   return (
     <div>
       <h1> Residents list</h1>
       <TableContainer component={Paper}>
-        <Table style={{width:1600}} aria-label="simple table">
+        <Table style={{ width: 1600 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="left">First name</TableCell>
@@ -72,16 +75,22 @@ export default function Residents() {
                 <TableCell>
                   <Button
                     variant="contained"
-                    size="large"
+                    size="small"
                     startIcon={<EditIcon />}
                   >
-                    <Link href="/UpdateResident" color="inherit">
+                    <Link href={`/UpdateResident/${data.residentId}`} color="inherit">
                       Update
                     </Link>
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => onDelete(data.residentId)}>
+                  <Button onClick={() => 
+                  {onDelete(data.residentId);
+                    refresh();
+                    }}
+                    size="small"
+                    startIcon={<DeleteIcon />}
+                  >
                     Delete
                   </Button>
                 </TableCell>
@@ -96,7 +105,7 @@ export default function Residents() {
         direction="row"
         justifyContent="center"
       >
-        <Button variant="contained" size="medium" startIcon={<HomeIcon/>}>
+        <Button variant="contained" size="medium" startIcon={<HomeIcon />}>
           <Link href="/Property" color="inherit">
             Go to Properties
           </Link>

@@ -2,11 +2,11 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import React, { useState } from "react";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import {useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { useParams } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
 
 function AddResident() {
   const [first, setFirst] = useState("");
@@ -19,15 +19,12 @@ function AddResident() {
   const [emer, setEmer] = useState("");
   const [income, setIncome] = useState("");
 
-  const {propertyId} =useParams();
-
-  const navigate = useNavigate();
+  let { propertyId } = useParams();
 
   const postResident = async (e) => {
     e.preventDefault();
     try {
-      console.log("postResident", propertyId);
-      await axios.post('http://localhost:8080/resident/post/${propertyId}', {
+      await axios.post(`http://localhost:8080/resident/post/${propertyId}`, {
         first,
         last,
         ssn,
@@ -38,7 +35,6 @@ function AddResident() {
         emer,
         income,
       });
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +50,7 @@ function AddResident() {
       autoComplete="off"
     >
       <div>
+        <h1>Add new resident</h1>
         <TextField
           label="Resident first name"
           type="text"
@@ -118,16 +115,23 @@ function AddResident() {
           onChange={(e) => {
             setIncome(e.target.value);
           }}
-          />
+        />
       </div>
 
       <Button
-          onClick={postResident}
-          size="small" variant="contained"
-          startIcon={<AddCircleIcon/>}
-        >
-          Submit
+        onClick={postResident}
+        size="large"
+        variant="contained"
+      >
+        Submit
+      </Button>
+      <Box textAlign="center">
+        <Button variant="outlined" size="large" startIcon={<HomeIcon />}>
+          <Link to="/" color="inherit">
+            Go back
+          </Link>
         </Button>
+      </Box>
     </Box>
   );
 }

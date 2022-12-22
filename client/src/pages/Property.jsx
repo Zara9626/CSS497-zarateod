@@ -12,22 +12,32 @@ import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import PaidIcon from "@mui/icons-material/Paid";
+import { useNavigate } from "react-router-dom";
 
 const Property = () => {
   const [propertyList, setPropertyList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProperty();
   }, []);
 
   const getProperty = async () => {
-    const response = await axios.get("http://localhost:8080/property/get");
+    const response = await axios.get("http://localhost:8080/property/get/");
     setPropertyList(response.data);
+  };
+  const handleInc = (propId) => {
+    const url = "/AddIncident/" + propId;
+    navigate(url);
+  };
+  const handlePay = (propId) => {
+    const url = "/AddPayment/" + propId;
+    navigate(url);
   };
 
   return (
     <div>
-      <h1>List of properties</h1>
+      <h1>Occupied properties</h1>
       <TableContainer component={Paper}>
         <Table style={{ width: 1600 }} size="small" aria-label="a dense table">
           <TableHead>
@@ -63,14 +73,20 @@ const Property = () => {
                     size="small"
                     startIcon={<EditIcon />}
                   >
-                    <Link href="/UpdateProp" color="inherit">
+                    <Link
+                      href={`/UpdateProp/${data.propertyId}`}
+                      color="inherit"
+                    >
                       Update
                     </Link>
                   </Button>
                 </TableCell>
                 <TableCell size="string">
                   <Button variant="contained" size="small">
-                    <Link href="/ReportIncident" color="inherit">
+                    <Link
+                      href={`/ReportIncident/${data.propertyId}/${data.incidentId}`}
+                      color="inherit"
+                    >
                       Incidents
                     </Link>
                   </Button>
@@ -81,7 +97,10 @@ const Property = () => {
                     size="small"
                     startIcon={<HomeRepairServiceIcon />}
                   >
-                    <Link href="/ReportMain" color="inherit">
+                    <Link
+                      href={`/ReportMain/${data.propertyId}`}
+                      color="inherit"
+                    >
                       Maintenance records
                     </Link>
                   </Button>
@@ -92,8 +111,42 @@ const Property = () => {
                     size="small"
                     startIcon={<PaidIcon />}
                   >
-                    <Link href="/ReportPay" color="inherit">
+                    <Link
+                      href={`/ReportPay/${data.propertyId}`}
+                      color="inherit"
+                    >
                       Payments
+                    </Link>
+                  </Button>
+                </TableCell>
+                <TableCell size="string">
+                  <Button variant="contained" size="small">
+                    <Link
+                      color="inherit"
+                      state={{ propId: data.propertyId }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePay(data.propertyId);
+                      }}
+                    >
+                      Add payment
+                    </Link>
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    size="small"
+                  >
+                    <Link
+                      color="inherit"
+                      state={{ propId: data.propertyId }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleInc(data.propertyId);
+                      }}
+                    >
+                      Add new incident
                     </Link>
                   </Button>
                 </TableCell>

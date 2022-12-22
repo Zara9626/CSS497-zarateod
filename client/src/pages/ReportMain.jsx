@@ -11,21 +11,29 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
+import { useParams } from "react-router";
 
 function Maintenance() {
   const [maintenanceList, setMaintenanceList] = useState([]);
+
+  const { propertyId } = useParams();
+
   useEffect(() => {
-    axios.get(`http://localhost:8080/maintenance`).then((response) => {
-      console.log(response.data);
-      setMaintenanceList(response.data);
-    });
+    getMainById();
   }, []);
+
+  const getMainById = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/maintenance/get/${propertyId}`
+    );
+    setMaintenanceList(response.data);
+  };
 
   return (
     <div>
-      <h1>Maintenance</h1>
+      <h1>Maintenance records </h1>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table style={{ width: 1600 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell align="left">Maintenance date</TableCell>
@@ -42,7 +50,7 @@ function Maintenance() {
                 <TableCell align="left">{data.mainDate}</TableCell>
                 <TableCell align="left">{data.description}</TableCell>
                 <TableCell align="left">{data.eventDate}</TableCell>
-                <TableCell align="left">{data.desc}</TableCell>
+                <TableCell align="left">{data.happened}</TableCell>
                 <TableCell align="left">{data.charge}</TableCell>
                 <TableCell align="left">{data.contractorName}</TableCell>
               </TableRow>

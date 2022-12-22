@@ -8,15 +8,16 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
-import CachedIcon from "@mui/icons-material/Cached";
 import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
 
 const EmptyProps = () => {
   const [emptyList, setEmpty] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProperty();
@@ -38,6 +39,16 @@ const EmptyProps = () => {
       console.log(error);
     }
   };
+
+  function refresh(){
+    window.location.reload(true);
+
+  };
+
+  const handleClick = (propId) => {
+    const url = "/AddResident/" + propId;
+    navigate(url);
+  }
 
   return (
     <div>
@@ -68,29 +79,28 @@ const EmptyProps = () => {
                     size="small"
                     startIcon={<PersonAddAlt1Icon />}
                   >
-                    <Link href="/AddResident" color="inherit">
+                    <Link
+                      color="inherit"
+                      state={{ propId: data.propertyId }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleClick(data.propertyId);
+                      }}
+                    >
                       Add new Resident
                     </Link>
                   </Button>
                 </TableCell>
                 <TableCell>
                   <Button
-                    onClick={() => onDelete(data.propertyId)}
+                    onClick={() => 
+                      {onDelete(data.propertyId); 
+                      refresh();
+                    }}
                     size="small"
                     startIcon={<DeleteIcon />}
                   >
                     Delete
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<CachedIcon />}
-                  >
-                    <Link href="/Update" color="inherit">
-                      Update
-                    </Link>
                   </Button>
                 </TableCell>
               </TableRow>

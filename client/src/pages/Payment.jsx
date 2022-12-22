@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 
 export default function Payment() {
   const [paymentList, setPaymentList] = useState([]);
@@ -44,7 +44,6 @@ export default function Payment() {
                 <TableCell>{data.amount}</TableCell>
                 <TableCell>{data.receiptNum}</TableCell>
                 <TableCell>{data.paymentDate}</TableCell>
-  
               </TableRow>
             ))}
           </TableBody>
@@ -56,12 +55,12 @@ export default function Payment() {
         direction="row"
         justifyContent="center"
       >
-          <Button variant="contained" size="medium" startIcon={<HomeIcon />}>
+        <Button variant="contained" size="medium" startIcon={<HomeIcon />}>
           <Link href="/Property" color="inherit">
             Go to Properties
           </Link>
         </Button>
-        </Stack>
+      </Stack>
     </div>
   );
 }

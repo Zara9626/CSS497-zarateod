@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 import Button from "@mui/material/Button";
-
+import HomeIcon from "@mui/icons-material/Home";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
@@ -12,23 +12,21 @@ const UpdateResident = () => {
   const [employerContact, setEmp] = useState("");
   const [emergencyContact, setEmer] = useState("");
   const [income, setIncome] = useState("");
-  const { residentId } = useParams();
 
+  let { residentId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     getResidentById();
   }, []);
   const updateResident = async (e) => {
-    e.preventDefault();
     try {
-      await axios.patch(`http://localhost:8080/property/put/${residentId}`, {
+      await axios.put(`http://localhost:8080/resident/put/${residentId}`, {
         phone,
         employerContact,
         emergencyContact,
         income,
       });
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -43,6 +41,10 @@ const UpdateResident = () => {
     setIncome(response.data.setIncome);
   };
 
+  function refresh() {
+    window.location.reload(true);
+  }
+
   return (
     <Box
       component="form"
@@ -53,6 +55,7 @@ const UpdateResident = () => {
       autoComplete="off"
     >
       <div>
+        <h1> Update resident data</h1>
         <TextField
           label="Phone number"
           onChange={(e) => {
@@ -81,12 +84,23 @@ const UpdateResident = () => {
         />
 
         <Button
-          onClick={() => updateResident()}
+          onClick={() => {
+            updateResident();
+            navigate("/Residents");
+            refresh();
+          }}
           size="large"
           variant="contained"
         >
           Update
         </Button>
+        <Box textAlign="center">
+          <Button variant="outlined" size="large" startIcon={<HomeIcon />}>
+            <Link to="/" color="inherit">
+              Go back
+            </Link>
+          </Button>
+        </Box>
       </div>
     </Box>
   );
