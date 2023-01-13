@@ -42,10 +42,9 @@ const UpdateIncident = () => {
     setPoliceDate(response.data.policeReportDate);
     setPoliceId(response.data.policeReportId);
   };
-  function refresh(){
+  function refresh() {
     window.location.reload(true);
-
-  };
+  }
   return (
     <Box
       component="form"
@@ -82,10 +81,15 @@ const UpdateIncident = () => {
             setPoliceId(e.target.value);
           }}
         />
-        <Button onClick={() => {updInc();
-        navigate('/Incident');refresh()
-        }}
-        size="large" variant="contained">
+        <Button
+          onClick={() => {
+            updInc();
+            navigate("/Incident");
+            refresh();
+          }}
+          size="large"
+          variant="contained"
+        >
           Update
         </Button>
         <Box textAlign="center">

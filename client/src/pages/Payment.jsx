@@ -11,9 +11,12 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
+import { useParams } from "react-router";
 
 export default function Payment() {
   const [paymentList, setPaymentList] = useState([]);
+
+  const { propertyId } = useParams();
   useEffect(() => {
     axios.get(`http://localhost:8080/payment`).then((response) => {
       console.log(response.data);
@@ -39,9 +42,13 @@ export default function Payment() {
           <TableBody>
             {paymentList.map((data, id) => (
               <TableRow key={id}>
-                <TableCell>{data.apartmentNum}</TableCell>
+                <TableCell>
+                  <Link href={`/ReportProp/${data.propertyId}`}>
+                    {data.apartmentNum}
+                  </Link>
+                </TableCell>
                 <TableCell>{data.address}</TableCell>
-                <TableCell>{data.amount}</TableCell>
+                <TableCell> $ {data.amount}</TableCell>
                 <TableCell>{data.receiptNum}</TableCell>
                 <TableCell>{data.paymentDate}</TableCell>
               </TableRow>

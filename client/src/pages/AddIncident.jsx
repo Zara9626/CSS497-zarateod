@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Axios from "axios";
 import HomeIcon from "@mui/icons-material/Home";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Button from "@mui/material/Button";
 import { useParams } from "react-router";
+import { useState, useEffect } from "react";
 
 function AddIncident() {
   const [eventDate, setEvent] = useState("");
@@ -14,7 +15,13 @@ function AddIncident() {
   const [policeReportDate, setReportDate] = useState("");
   const [policeReportId, setReportId] = useState("");
 
+  const [proList, setProList] = useState([]);
   const { propertyId } = useParams();
+
+  useEffect(() => {
+    getProById();
+    // eslint-disable-next-line
+  }, []);
 
   const postIncident = async (e) => {
     e.preventDefault();
@@ -31,6 +38,13 @@ function AddIncident() {
     }
   };
 
+  const getProById = async () => {
+    const response = await Axios.get(
+      `http://localhost:8080/property/get/${propertyId}`
+    );
+    setProList(response.data);
+  };
+
   return (
     <Box
       component="form"
@@ -41,7 +55,14 @@ function AddIncident() {
       autoComplete="off"
     >
       <div>
-        <h1> Add new incident</h1>
+        <h1> Add new incident for :</h1>
+        {proList.map((id) => (
+          <span key={id}>
+            {" "}
+            Apartment : {id.apartmentNum} <br />
+            Adress : {id.address} <br />
+          </span>
+        ))}
         <TextField
           label="Event date YYYY-MM-DD"
           type="text"
@@ -78,8 +99,7 @@ function AddIncident() {
           }}
         />
       </div>
-      <Button onClick={postIncident}
-      size="large" variant="contained">
+      <Button onClick={postIncident} size="large" variant="contained">
         Submit
       </Button>
       <Box textAlign="center">

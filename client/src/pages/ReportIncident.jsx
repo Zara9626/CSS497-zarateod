@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 const ReportIncident = () => {
   const [reportList, setReportList] = useState([]);
+  const [propList, setPropList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -25,6 +26,8 @@ const ReportIncident = () => {
 
   useEffect(() => {
     getIncidentById();
+    getProById();
+    // eslint-disable-next-line
   }, []);
 
   const getIncidentById = async () => {
@@ -33,14 +36,31 @@ const ReportIncident = () => {
     );
     setReportList(response.data);
   };
+
+  const getProById = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/property/get/${propertyId}`
+    );
+    setPropList(response.data);
+  };
+
   const handleMain = (incId) => {
-    const url = "/AddMaintenance/" + incId;
+    const url = "/AddMaintenance/" + propertyId + "/" + incId;
     navigate(url);
   };
 
   return (
     <div>
-      <h1> Incidents </h1>
+      <h1> Incidents for </h1>
+      {propList.map((id) => (
+        <span key={id}>
+          {" "}
+          Apartment : {id.apartmentNum} <br />
+          Adress : {id.address} <br />
+          <br />
+        </span>
+      ))}
+
       <TableContainer component={Paper}>
         <Table style={{ width: 1300 }} size="small" aria-label="a dense table">
           <TableHead>

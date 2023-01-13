@@ -18,6 +18,7 @@ const UpdateResident = () => {
 
   useEffect(() => {
     getResidentById();
+    
   }, []);
   const updateResident = async (e) => {
     try {
@@ -54,8 +55,8 @@ const UpdateResident = () => {
       noValidate
       autoComplete="off"
     >
-      <div>
-        <h1> Update resident data</h1>
+       <div>
+        <h1> Update the resident info</h1>
         <TextField
           label="Phone number"
           onChange={(e) => {

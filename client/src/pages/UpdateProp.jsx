@@ -13,12 +13,16 @@ const UpdateProp = () => {
   const [leaseEnd, setEnd] = useState("");
   const [damage, setDamage] = useState("");
 
+  const [proList, setProList] = useState([]);
+
   let { propertyId } = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getPropById();
+    getProById();
+    // eslint-disable-next-line
   }, []);
 
   const updateData = async (e) => {
@@ -34,7 +38,7 @@ const UpdateProp = () => {
     }
   };
   const getPropById = async (propertyId) => {
-  const response = await axios.get(
+    const response = await axios.get(
       `http://localhost:8080/property/put/${propertyId}`
     );
     setRent(response.data.rent);
@@ -42,10 +46,16 @@ const UpdateProp = () => {
     setDamage(response.data.damage);
   };
 
-  function refresh(){
+  function refresh() {
     window.location.reload(true);
-
+  }
+  const getProById = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/property/get/${propertyId}`
+    );
+    setProList(response.data);
   };
+
   return (
     <Box
       component="form"
@@ -56,7 +66,14 @@ const UpdateProp = () => {
       autoComplete="off"
     >
       <div>
-        <h1> Update property details</h1>
+        <h1> Update property details for :</h1>
+        {proList.map((id) => (
+          <span key={id}>
+            {" "}
+            Apartment : {id.apartmentNum} <br />
+            Adress : {id.address} <br />
+          </span>
+        ))}
         <TextField
           label="Rent"
           onChange={(e) => {
@@ -84,11 +101,15 @@ const UpdateProp = () => {
           }}
         />
 
-        <Button onClick={() => {updateData();
-        navigate('/Property');refresh()
-        }}
-        
-       size="large" variant="contained">
+        <Button
+          onClick={() => {
+            updateData();
+            navigate("/Property");
+            refresh();
+          }}
+          size="large"
+          variant="contained"
+        >
           Update
         </Button>
         <Box textAlign="center">

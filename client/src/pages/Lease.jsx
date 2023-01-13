@@ -10,49 +10,48 @@ import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router";
 
-const EmptyProps = () => {
-  const [emptyList, setEmpty] = useState([]);
+const Lease = () => {
+  const [leaseList, setLease] = useState([]);
+  const [select, setSelected] = useState({});
+  
   const navigate = useNavigate();
 
+  const { propertyId } = useParams();
+
   useEffect(() => {
-    getProperty();
+    getLease();
+    getRes();
     // eslint-disable-next-line
   }, []);
 
-  const getProperty = async () => {
-    const response = await axios.get(
-      "http://localhost:8080/property/empty/get"
-    );
-    setEmpty(response.data);
+  const getLease = async () => {
+    const response = await axios.get(`http://localhost:8080/lease/get`);
+    console.log(response.data);
+    setLease(response.data);
   };
 
-  const onDelete = async (propertyId) => {
-    try {
-      console.log(propertyId);
-      await axios.delete(`http://localhost:8080/property/delete/${propertyId}`);
-      getProperty();
-    } catch (error) {
-      console.log(error);
-    }
+  const getRes = async () => {
+    const response = await axios.get(`http://localhost:8080/resident/get/all`);
+    setSelected(response.data);
+  };
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    setSelected(e.target.value);
   };
 
-  function refresh() {
-    window.location.reload(true);
-  }
-
-  const handleClick = (propId) => {
-    const url = "/AddLease/" + propId;
+  const handleClick = (leaId) => {
+    const url = "/AddResident/" + leaId;
     navigate(url);
   };
-
   return (
     <div>
-      <h1>Unoccupied properties</h1>
+      <h1>Leases</h1>
       <TableContainer component={Paper}>
         <Table style={{ width: 1200 }} size="small" aria-label="a dense table">
           <TableHead>
@@ -61,19 +60,19 @@ const EmptyProps = () => {
               <TableCell align="left">Address</TableCell>
               <TableCell align="left">Bedrooms</TableCell>
               <TableCell align="left">Sq.Feet</TableCell>
+              <TableCell align="left">Lease start</TableCell>
+              <TableCell align="left">Lease end</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {emptyList.map((data, id) => (
+            {leaseList.map((data, id) => (
               <TableRow key={id}>
-                <TableCell>
-                  <Link href={`/ReportProp/${data.propertyId}`}>
-                    {data.apartmentNum}
-                  </Link>
-                </TableCell>
+                <TableCell>{data.apartmentNum}</TableCell>
                 <TableCell>{data.address}</TableCell>
                 <TableCell>{data.bedrooms}</TableCell>
                 <TableCell>{data.sqFeet}</TableCell>
+                <TableCell>{data.leaseStart}</TableCell>
+                <TableCell>{data.leaseEnd}</TableCell>
 
                 <TableCell size="string">
                   <Button
@@ -83,27 +82,25 @@ const EmptyProps = () => {
                   >
                     <Link
                       color="inherit"
-                      state={{ propId: data.propertyId }}
+                      state={{ propId: data.leaseId }}
                       onClick={(e) => {
                         e.preventDefault();
-                        handleClick(data.propertyId);
+                        handleClick(data.leaseId);
                       }}
                     >
-                      Add new lease
+                      Add new resident
                     </Link>
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    onClick={() => {
-                      onDelete(data.propertyId);
-                      refresh();
-                    }}
-                    size="small"
-                    startIcon={<DeleteIcon />}
-                  >
-                    Delete
-                  </Button>
+                  <select onChange={handleChange}>
+                    {select &&
+                      select.map((resident) => (
+                        <option key={resident.id} value={resident.id}>
+                          {resident.last}
+                        </option>
+                      ))}
+                  </select>
                 </TableCell>
               </TableRow>
             ))}
@@ -126,4 +123,4 @@ const EmptyProps = () => {
     </div>
   );
 };
-export default EmptyProps;
+export default Lease;

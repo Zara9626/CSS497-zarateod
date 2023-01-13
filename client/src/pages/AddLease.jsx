@@ -1,41 +1,35 @@
-import { useParams } from "react-router";
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Axios from "axios";
+import HomeIcon from "@mui/icons-material/Home";
 import { Link} from "react-router-dom";
 import Button from "@mui/material/Button";
-import HomeIcon from "@mui/icons-material/Home";
+import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 
-function AddMaintenance() {
-  const [mainDate, setDate] = useState("");
-  const [description, setDesc] = useState("");
-  const [charge, setCharge] = useState("");
-  const [contractorName, setContractorName] = useState("");
-
+function AddLease() {
+  const [leaseStart, setStart] = useState("");
+  const [leaseEnd, setEnd] = useState("");
+  const [rent, setRent] = useState("");
+  
   const [proList, setProList] = useState([]);
+  const { propertyId } = useParams();
 
-  let { incidentId } = useParams();
-  let { propertyId } = useParams();
 
   useEffect(() => {
     getProById();
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
-  const postMain = async (e) => {
+  const postLease = async (e) => {
     e.preventDefault();
     try {
-      await Axios.post(
-        `http://localhost:8080/maintenance/post/${propertyId}/${incidentId}`,
-        {
-          mainDate,
-          description,
-          charge,
-          contractorName,
-        }
-      );
+      await Axios.post(`http://localhost:8080/lease/post/${propertyId}`, {
+          leaseStart,
+          leaseEnd,
+          rent
+      });
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +52,7 @@ function AddMaintenance() {
       autoComplete="off"
     >
       <div>
-        <h1> Add new maintenance for :</h1>
+        <h1> Add new lease for :</h1>
         {proList.map((id) => (
           <span key={id}>
             {" "}
@@ -67,35 +61,28 @@ function AddMaintenance() {
           </span>
         ))}
         <TextField
-          label="Date of Maintenance YYYY-MM-DD"
+          label="Lease start in YYYY-MM-DD"
           type="text"
           onChange={(e) => {
-            setDate(e.target.value);
+            setStart(e.target.value);
           }}
         />
         <TextField
-          label="Description of work "
+          label="Lease end in YYYY-MM-DD"
           type="text"
           onChange={(e) => {
-            setDesc(e.target.value);
+            setEnd(e.target.value);
           }}
         />
         <TextField
-          label="Charge in $$"
+          label="Rent amount "
           type="text"
           onChange={(e) => {
-            setCharge(e.target.value);
-          }}
-        />
-        <TextField
-          label="Contractor name"
-          type="text"
-          onChange={(e) => {
-            setContractorName(e.target.value);
+            setRent(e.target.value);
           }}
         />
       </div>
-      <Button onClick={postMain} size="large" variant="contained">
+      <Button onClick={postLease} size="large" variant="contained">
         Submit
       </Button>
       <Box textAlign="center">
@@ -108,4 +95,4 @@ function AddMaintenance() {
     </Box>
   );
 }
-export default AddMaintenance;
+export default AddLease;

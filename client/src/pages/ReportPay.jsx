@@ -12,15 +12,18 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
 
 export default function Payment() {
   const [paymentList, setPaymentList] = useState([]);
   const { propertyId } = useParams();
-  const navigate = useNavigate();
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState([]);
 
   useEffect(() => {
     getPayById();
+    getList();
+    getTotal();
+    // eslint-disable-next-line
   }, []);
   const getPayById = async () => {
     const response = await axios.get(
@@ -28,10 +31,30 @@ export default function Payment() {
     );
     setPaymentList(response.data);
   };
+  const getList = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/property/get/${propertyId}`
+    );
+    setList(response.data);
+  };
+  const getTotal = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/payment/get/total/${propertyId}`
+    );
+    setTotal(response.data);
+  };
 
   return (
     <div>
-      <h1> Payment Records</h1>
+      <h1> Payment history for </h1>
+      {list.map((id) => (
+        <span key={id}>
+          {" "}
+          Apartment : {id.apartmentNum} <br />
+          Adress : {id.address} <br />
+          <br />
+        </span>
+      ))}
       <TableContainer component={Paper}>
         <Table style={{ width: 1200 }} size="small" aria-label="a dense table">
           <TableHead>
@@ -41,11 +64,10 @@ export default function Payment() {
               <TableCell align="left">Payment date</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {paymentList.map((data, id) => (
               <TableRow key={id}>
-                <TableCell>{data.amount}</TableCell>
+                <TableCell> $ {data.amount}</TableCell>
                 <TableCell>{data.receiptNum}</TableCell>
                 <TableCell>{data.paymentDate}</TableCell>
               </TableRow>
@@ -53,6 +75,12 @@ export default function Payment() {
           </TableBody>
         </Table>
       </TableContainer>
+      {total.map((id) => (
+        <span key={id}>
+          {" "}
+          <h1> Total : $ {id.totalAmount}</h1>
+        </span>
+      ))}
       <Stack
         mt={6}
         spacing={{ xs: 6, sm: 6, md: 20 }}

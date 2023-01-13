@@ -44,9 +44,9 @@ function Maintenance() {
                 <TableCell align="left">{data.description}</TableCell>
                 <TableCell align="left">{data.eventDate}</TableCell>
                 <TableCell align="left">{data.happened}</TableCell>
-                <TableCell align="left">{data.charge}</TableCell>
+                <TableCell align="left"> $ {data.charge}</TableCell>
                 <TableCell align="left">{data.contractorName}</TableCell>
-                <TableCell size="string" size="small" align="center">
+                <TableCell size="string">
                   <Button
                     variant="contained"
                     size="small"

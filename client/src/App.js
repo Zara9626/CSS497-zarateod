@@ -19,6 +19,11 @@ import ReportMain from './pages/ReportMain';
 import ReportPay from './pages/ReportPay';
 import UpdateMain from './pages/UpdateMain';
 import UpdateIncident from './pages/UpdateIncident';
+import ReportResident from'./pages/ReportResident';
+import AddLease from './pages/AddLease';
+import Lease from './pages/Lease';
+import ReportProp from './pages/ReportProp';
+
 
 
 function App() {
@@ -29,11 +34,12 @@ function App() {
       <Routes>
         <Route path="Residents" element={<Residents />} />
         <Route path="AddProp" element={<AddProp />} />
-        <Route path="/AddMaintenance/:incidentId" element={<AddMaintenance />} />
-        <Route path="Incident" element={<Incident />} />
-        
+        <Route path="/AddMaintenance/:propertyId/:incidentId" element={<AddMaintenance />} />
+        <Route path="/Incident" element={<Incident />} />
+        <Route path= "/Lease" element={<Lease/>} />
+       
         <Route path="/UpdateProp/:propertyId" element={<UpdateProp />} />
-        <Route path="/AddResident/:propertyId" element={<AddResident />} />
+        <Route path="/AddResident/:leaseId" element={<AddResident />} />
         <Route path="/UpdateResident/:residentId" element={<UpdateResident />} />
         <Route path="/Maintenance" element={<Maintenance />} />
         <Route path="/AddIncident/:propertyId" element={<AddIncident />} />
@@ -46,6 +52,9 @@ function App() {
         <Route path="/ReportPay/:propertyId" element={<ReportPay />} />
         <Route path="/UpdateMain/:eventId" element={<UpdateMain />} />
         <Route path="/UpdateIncident/:propertyId" element={<UpdateIncident />} />
+        <Route path="/ReportResident/:propertyId/" element={<ReportResident/>} />
+        <Route path="/ReportProp/:propertyId" element={<ReportProp/>}/>
+        <Route path= "/AddLease/:propertyId" element={<AddLease/>} />
         <Route path="/" element={<Property />} />
 
       </Routes>

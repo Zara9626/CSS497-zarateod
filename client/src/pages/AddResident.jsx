@@ -1,11 +1,11 @@
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 
 function AddResident() {
@@ -19,12 +19,17 @@ function AddResident() {
   const [emer, setEmer] = useState("");
   const [income, setIncome] = useState("");
 
-  let { propertyId } = useParams();
-
+  let { leaseId } = useParams();
+  
+  useEffect(() => {
+    // eslint-disable-next-line
+  }, []);
+  
+  
   const postResident = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:8080/resident/post/${propertyId}`, {
+      await axios.post(`http://localhost:8080/resident/post/${leaseId}`, {
         first,
         last,
         ssn,
@@ -50,7 +55,8 @@ function AddResident() {
       autoComplete="off"
     >
       <div>
-        <h1>Add new resident</h1>
+        <h1> Add new resident</h1>
+        
         <TextField
           label="Resident first name"
           type="text"
@@ -68,6 +74,7 @@ function AddResident() {
         <TextField
           label="SSN"
           type="text"
+          
           onChange={(e) => {
             setSsn(e.target.value);
           }}
@@ -118,11 +125,7 @@ function AddResident() {
         />
       </div>
 
-      <Button
-        onClick={postResident}
-        size="large"
-        variant="contained"
-      >
+      <Button onClick={postResident} size="large" variant="contained">
         Submit
       </Button>
       <Box textAlign="center">

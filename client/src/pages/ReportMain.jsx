@@ -15,11 +15,14 @@ import { useParams } from "react-router";
 
 function Maintenance() {
   const [maintenanceList, setMaintenanceList] = useState([]);
+  const [list, setList] = useState([]);
 
   const { propertyId } = useParams();
 
   useEffect(() => {
     getMainById();
+    getList();
+    // eslint-disable-next-line
   }, []);
 
   const getMainById = async () => {
@@ -28,10 +31,24 @@ function Maintenance() {
     );
     setMaintenanceList(response.data);
   };
+  const getList = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/property/get/${propertyId}`
+    );
+    setList(response.data);
+  };
 
   return (
     <div>
-      <h1>Maintenance records </h1>
+      <h1> Maintenance records for </h1>
+      {list.map((id) => (
+        <span key={id}>
+          {" "}
+          Apartment : {id.apartmentNum} <br />
+          Adress : {id.address} <br />
+          <br />
+        </span>
+      ))}
       <TableContainer component={Paper}>
         <Table style={{ width: 1600 }} size="small" aria-label="a dense table">
           <TableHead>
@@ -51,7 +68,7 @@ function Maintenance() {
                 <TableCell align="left">{data.description}</TableCell>
                 <TableCell align="left">{data.eventDate}</TableCell>
                 <TableCell align="left">{data.happened}</TableCell>
-                <TableCell align="left">{data.charge}</TableCell>
+                <TableCell align="left"> $ {data.charge}</TableCell>
                 <TableCell align="left">{data.contractorName}</TableCell>
               </TableRow>
             ))}

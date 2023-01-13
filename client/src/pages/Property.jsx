@@ -20,6 +20,7 @@ const Property = () => {
 
   useEffect(() => {
     getProperty();
+    // eslint-disable-next-line
   }, []);
 
   const getProperty = async () => {
@@ -39,7 +40,7 @@ const Property = () => {
     <div>
       <h1>Occupied properties</h1>
       <TableContainer component={Paper}>
-        <Table style={{ width: 1600 }} size="small" aria-label="a dense table">
+        <Table style={{ width: 1800 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell align="left">Apartment Number</TableCell>
@@ -57,7 +58,11 @@ const Property = () => {
           <TableBody>
             {propertyList.map((data, id) => (
               <TableRow key={id}>
-                <TableCell>{data.apartmentNum}</TableCell>
+                <TableCell>
+                  <Link href={`/ReportProp/${data.propertyId}`}>
+                    {data.apartmentNum}
+                  </Link>
+                  </TableCell>
                 <TableCell>{data.address}</TableCell>
                 <TableCell>{data.bedrooms}</TableCell>
                 <TableCell>{data.sqFeet}</TableCell>
@@ -65,8 +70,16 @@ const Property = () => {
                 <TableCell>{data.leaseStart}</TableCell>
                 <TableCell>{data.leaseEnd}</TableCell>
                 <TableCell>{data.damage}</TableCell>
-                <TableCell>{data.first}</TableCell>
-                <TableCell>{data.last}</TableCell>
+                <TableCell>
+                  <Link href={`/ReportResident/${data.propertyId}`}>
+                    {data.first}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link href={`/ReportResident/${data.propertyId}`}>
+                    {data.last}
+                  </Link>
+                </TableCell>
                 <TableCell size="small">
                   <Button
                     variant="contained"
@@ -134,10 +147,7 @@ const Property = () => {
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    size="small"
-                  >
+                  <Button variant="contained" size="small">
                     <Link
                       color="inherit"
                       state={{ propId: data.propertyId }}

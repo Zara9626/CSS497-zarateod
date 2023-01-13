@@ -12,30 +12,33 @@ import Button from "@mui/material/Button";
 import CachedIcon from "@mui/icons-material/Cached";
 import Stack from "@mui/material/Stack";
 import HomeIcon from "@mui/icons-material/Home";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 
 function Incident() {
   const [incidentList, setIncidentList] = useState([]);
+  
 
   useEffect(() => {
     getInc();
-  },[]);
 
-  const getInc = async() => {
-    const response = await axios.get("http://localhost:8080/incident");
+    // eslint-disable-next-line
+  }, []);
+
+  const getInc = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/incident/${propertyId}`
+    );
     setIncidentList(response.data);
   };
-
+  
   const navigate = useNavigate();
-  let { incidentId } = useParams();
-
+  const { propertyId } = useParams();
 
   const handleMain = (incId) => {
-    const url = "/AddMaintenance/" + incId;
+    const url = "/AddMaintenance/" + propertyId + "/" + incId;
     navigate(url);
-  }
-
+  };
 
   return (
     <div>
@@ -59,7 +62,11 @@ function Incident() {
                 <TableCell>{data.eventDate}</TableCell>
                 <TableCell>{data.happened}</TableCell>
                 <TableCell>{data.address}</TableCell>
-                <TableCell>{data.apartmentNum}</TableCell>
+                <TableCell>
+                  <Link href={`/ReportProp/${data.propertyId}`}>
+                    {data.apartmentNum}
+                  </Link>
+                </TableCell>
                 <TableCell>{data.policeReportDate}</TableCell>
                 <TableCell>{data.officerName}</TableCell>
                 <TableCell>{data.policeReportId}</TableCell>
@@ -69,26 +76,24 @@ function Incident() {
                     size="small"
                     startIcon={<CachedIcon />}
                   >
-                    <Link href={`/UpdateIncident/${data.propertyId}`}
+                    <Link
+                      href={`/UpdateIncident/${data.propertyId}`}
                       color="inherit"
-                      >
+                    >
                       Update
                     </Link>
                   </Button>
                 </TableCell>
                 <TableCell size="string">
-                  <Button
-                    variant="contained"
-                    size="small"
-                  
-                  >
-                    <Link color="inherit"
+                  <Button variant="contained" size="small">
+                    <Link
+                      color="inherit"
                       state={{ propId: data.incidentId }}
                       onClick={(e) => {
                         e.preventDefault();
                         handleMain(data.incidentId);
                       }}
-                      >
+                    >
                       Add maintenance to this incident
                     </Link>
                   </Button>
